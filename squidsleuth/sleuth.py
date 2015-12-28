@@ -6,6 +6,7 @@ import threading
 import time
 
 from requests_futures.sessions import FuturesSession
+import six
 from six.moves.urllib import parse as urlparse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -55,7 +56,7 @@ class RequestTracker(object):
 
     @staticmethod
     def _default_hash_key(obj):
-        return hashlib.sha1(repr(obj)).digest()
+        return hashlib.sha1(six.b(repr(obj))).digest()
 
     def track(self, req):
         req_hash = self.hash_key(req)

@@ -5,7 +5,7 @@ import string
 from six.moves.urllib.parse import urlparse
 
 OBJ_REQ_LINE_RE = re.compile(
-    r"\A\s*(?P<method>HEAD|GET|POST|PUT|DELETE|PATCH|OPTIONS) (?P<uri>.*)\Z"
+    br"\A\s*(?P<method>HEAD|GET|POST|PUT|DELETE|PATCH|OPTIONS) (?P<uri>.*)\Z"
 )
 
 
@@ -44,7 +44,7 @@ def parse_active_request(buf):
             in_connection = True
             continue
         elif in_connection:
-            if not line or line[0] not in string.whitespace:
+            if not re.match(br"\A\s+", line):
                 in_connection = False
 
         if in_connection:
@@ -69,7 +69,7 @@ def parse_active_requests(buf):
 
 
 def parse_netdb_entry(buf):
-    return re.split(r"\s+", buf)[5:]
+    return re.split(br"\s+", buf)[5:]
 
 
 def parse_netdb_entries(buf):
@@ -84,4 +84,4 @@ def parse_domain_from_uri(uri):
     if b"://" in uri:
         return urlparse(uri).hostname
     else:
-        return uri.partition(":")[0]
+        return uri.partition(b":")[0]

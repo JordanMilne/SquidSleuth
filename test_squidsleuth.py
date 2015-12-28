@@ -35,14 +35,14 @@ KEY 38E2CC042B8059E878133FB46E03DDF3
         parsed = parsers.parse_cache_objects(buf)
         self.assertEqual(list(parsed), [
             {
-                "key": "3882356D0002E51DE3F7EC0176FE5FFC",
-                "method": "GET",
-                "uri": "http://foo.com/",
+                "key": b"3882356D0002E51DE3F7EC0176FE5FFC",
+                "method": b"GET",
+                "uri": b"http://foo.com/",
             },
             {
-                "key": "38E2CC042B8059E878133FB46E03DDF3",
-                "method": "GET",
-                "uri": "http://foobar.com/",
+                "key": b"38E2CC042B8059E878133FB46E03DDF3",
+                "method": b"GET",
+                "uri": b"http://foobar.com/",
             },
         ])
 
@@ -82,14 +82,14 @@ delay_pool 0"""
         self.assertEqual(list(parsed),
             [
                 {
-                    "client": "1.1.1.1",
+                    "client": b"1.1.1.1",
                     "date": dt.datetime(2015, 12, 26, 14, 0, 17, 204524),
-                    "uri": "http://coolvideos.com/whatever.mp4",
+                    "uri": b"http://coolvideos.com/whatever.mp4",
                 },
                 {
-                    "client": "4.4.4.4",
+                    "client": b"4.4.4.4",
                     "date": dt.datetime(2015, 12, 26, 13, 58, 31, 399619),
-                    "uri": "foobar.net:443",
+                    "uri": b"foobar.net:443",
                 },
             ]
         )
@@ -100,7 +100,7 @@ Network                                        recv/sent     RTT  Hops Hostnames
 1.1.1.1                                        0/   1     0.0   0.0 foo.com baz.com
 2.2.2.2                                        0/   1     0.0   0.0 bar.com"""
         parsed = parsers.parse_netdb_entries(buf)
-        self.assertSequenceEqual(list(parsed), ["foo.com", "baz.com", "bar.com"])
+        self.assertSequenceEqual(list(parsed), [b"foo.com", b"baz.com", b"bar.com"])
 
 
 class RequestTrackerTests(unittest.TestCase):
