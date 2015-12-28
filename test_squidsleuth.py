@@ -83,12 +83,12 @@ delay_pool 0"""
             [
                 {
                     "client": "1.1.1.1",
-                    "date": dt.datetime(2015, 12, 26, 6, 0, 17, 204524),
+                    "date": dt.datetime(2015, 12, 26, 14, 0, 17, 204524),
                     "uri": "http://coolvideos.com/whatever.mp4",
                 },
                 {
                     "client": "4.4.4.4",
-                    "date": dt.datetime(2015, 12, 26, 5, 58, 31, 399619),
+                    "date": dt.datetime(2015, 12, 26, 13, 58, 31, 399619),
                     "uri": "foobar.net:443",
                 },
             ]

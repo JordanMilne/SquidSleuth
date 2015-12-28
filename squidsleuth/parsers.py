@@ -60,7 +60,7 @@ def parse_active_request(buf):
         elif key == b"start":
             # TODO: use "seconds ago" instead? Not sure if this is tz-dependant.
             timeflot = float(val.split(b" ", 1)[0])
-            parsed["date"] = dt.datetime.fromtimestamp(timeflot)
+            parsed["date"] = dt.datetime.utcfromtimestamp(timeflot)
     return parsed
 
 
