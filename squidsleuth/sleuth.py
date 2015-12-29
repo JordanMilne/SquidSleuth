@@ -5,6 +5,7 @@ import re
 import threading
 import time
 
+from requests.adapters import HTTPAdapter
 from requests_futures.sessions import FuturesSession
 import six
 from six.moves.urllib import parse as urlparse
@@ -86,6 +87,8 @@ class Sleuth(object):
         engine = create_engine(conn_str)
         self._sess_maker = sessionmaker(bind=engine)
         self.req_session.proxies = {"http": proxy_host, "https": proxy_host}
+        self.req_session.mount('http://', HTTPAdapter(max_retries=2))
+        self.req_session.mount('https://', HTTPAdapter(max_retries=2))
         self._reqTracker = RequestTracker()
         self._activeRequests = 0
         self._seenRequests = 0
@@ -126,7 +129,8 @@ class Sleuth(object):
         sess.add(req_row)
 
     def _check_base_url(self, base_url):
-        resp = self.req_session.get(base_url + "squid-internal-mgr/menu").result()
+        test_url = base_url + "squid-internal-mgr/menu"
+        resp = self.req_session.get(test_url, timeout=5.0).result()
         if resp.status_code != 200:
             if "<body id=ERR_ACCESS_DENIED>" not in resp.text:
                 return False, None
@@ -135,7 +139,7 @@ class Sleuth(object):
             return False, None
         return True, None
 
-    def _setup(self):
+    def guess_base_uri(self):
         parsed = urlparse.urlparse(self.proxy_host)
         port_segment = ":" + str(parsed.port) if parsed.port else ""
         parsed = parsed._replace(netloc="localhost" + port_segment, path="/")
@@ -167,6 +171,7 @@ class Sleuth(object):
         time.sleep(0.275)
 
     def run(self):
-        self._setup()
+        if not self.base_url:
+            self.guess_base_uri()
         while True:
             self._tick()
