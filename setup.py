@@ -63,6 +63,7 @@ setup(
     entry_points = {
         'console_scripts': [
             'squidsleuth = squidsleuth.main:main',
+            'squidsleuth_detectvuln = squidsleuth.main:main_detectvuln',
         ],
     },
     classifiers=[
