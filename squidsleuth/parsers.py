@@ -8,10 +8,17 @@ OBJ_REQ_LINE_RE = re.compile(
     br"\A\s*(?P<method>HEAD|GET|POST|PUT|DELETE|PATCH|OPTIONS) (?P<uri>.*)\Z"
 )
 
+# Squid generates different logs when run in SMP mode, it tells us which child
+# process each record is from. Strip that out.
+KID_RE = re.compile(br"\A(\}\s*)?by kid\d+\s*(\{\s*)?", re.M)
+
 
 def _split_records(records, sep):
     # TODO: Use StringIO-compatible parsing instead
-    return (x for x in records.split(sep) if x)
+    for record in records.split(sep):
+        record = re.sub(KID_RE, b"", record).rstrip()
+        if record:
+            yield record
 
 
 def parse_cache_object(buf):

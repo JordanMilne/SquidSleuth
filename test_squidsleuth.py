@@ -10,7 +10,8 @@ from squidsleuth import parsers, sleuth
 
 class ParserTests(unittest.TestCase):
     def test_parse_cache_objects(self):
-        buf = b"""KEY 3882356D0002E51DE3F7EC0176FE5FFC
+        buf = b"""by kid1 {
+KEY 3882356D0002E51DE3F7EC0176FE5FFC
 \tSTORE_OK      IN_MEMORY     SWAPOUT_NONE PING_DONE
 \tCACHABLE,DISPATCHED,VALIDATED
 \tLV:1451201123 LU:1451201130 LM:-1        EX:1453571570
@@ -31,7 +32,9 @@ KEY 38E2CC042B8059E878133FB46E03DDF3
 \tGET http://foobar.com/
 \tinmem_lo: 0
 \tinmem_hi: 216
-\tswapout: 0 bytes queued"""
+\tswapout: 0 bytes queued
+
+} by kid1"""
         parsed = parsers.parse_cache_objects(buf)
         self.assertEqual(list(parsed), [
             {
